@@ -108,6 +108,7 @@ class AutomaticSpeechRecognitionEvaluator(Evaluator):
             random_state=random_state,
             input_column=input_column,
             label_column=label_column,
+            feature_extractor=feature_extractor
         )
 
         return result
