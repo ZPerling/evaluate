@@ -80,6 +80,7 @@ class AutomaticSpeechRecognitionEvaluator(Evaluator):
         input_column: str = "path",
         label_column: str = "sentence",
         generation_kwargs: dict = None,
+        feature_extractor: any = None,
     ) -> Tuple[Dict[str, float], Any]:
         """
         input_column (`str`, defaults to `"path"`):
