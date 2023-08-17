@@ -20,6 +20,7 @@ import jiwer
 import jiwer.transforms as tr
 from datasets.config import PY_VERSION
 from packaging import version
+import datetime
 
 import evaluate
 
@@ -33,6 +34,12 @@ else:
 
 
 SENTENCE_DELIMITER = ""
+
+def write_string_to_file(string):
+    now = datetime.datetime.now()
+    timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
+    with open('/tmp/output.txt', 'a') as f:
+        f.write(f"{timestamp} -- {string}\n")
 
 
 if version.parse(importlib_metadata.version("jiwer")) < version.parse("2.3.0"):
@@ -146,6 +153,7 @@ class CER(evaluate.Metric):
                 hypothesis_transform=cer_transform,
             )["wer"]
             logger.info(f"reference: {reference}, hypothesis: {prediction}, cer: {ret}")
+            write_string_to_file(f"reference: {reference}, hypothesis: {prediction}, cer: {ret}")
             return ret
 
         incorrect = 0
@@ -161,4 +169,5 @@ class CER(evaluate.Metric):
             total += measures["substitutions"] + measures["deletions"] + measures["hits"]
         ret = incorrect / total
         logger.info(f"reference: {reference}, hypothesis: {prediction}, cer: {ret}")
+        write_string_to_file(f"reference: {reference}, hypothesis: {prediction}, cer: {ret}")
         return ret
