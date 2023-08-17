@@ -36,10 +36,15 @@ from . import config
 from .info import EvaluationModuleInfo
 from .naming import camelcase_to_snakecase
 from .utils.logging import get_logger
-
+import datetime
 
 logger = get_logger(__name__)
 
+def write_string_to_file(string):
+    now = datetime.datetime.now()
+    timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
+    with open('/tmp/output.txt', 'a') as f:
+        f.write(f"{timestamp} -- {string}\n")
 
 class FileFreeLock(BaseFileLock):
     """Thread lock until a file **cannot** be locked"""
@@ -475,7 +480,8 @@ class EvaluationModule(EvaluationModuleInfoMixin):
                     self.writer = None
                     os.remove(file_path)
                     filelock.release()
-
+            logger.info(f"reference: {references}, hypothesis: {predictions}, output: {output}")
+            write_string_to_file(f"reference: {references}, hypothesis: {predictions}, output: {output}")
             return output
         else:
             return None
