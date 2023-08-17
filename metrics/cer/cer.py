@@ -139,12 +139,14 @@ class CER(evaluate.Metric):
 
     def _compute(self, predictions, references, concatenate_texts=False):
         if concatenate_texts:
-            return jiwer.compute_measures(
+            ret = jiwer.compute_measures(
                 references,
                 predictions,
                 truth_transform=cer_transform,
                 hypothesis_transform=cer_transform,
             )["wer"]
+            logger.info(f"reference: {reference}, hypothesis: {prediction}, cer: {ret}")
+            return ret
 
         incorrect = 0
         total = 0
