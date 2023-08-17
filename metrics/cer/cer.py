@@ -24,6 +24,8 @@ from packaging import version
 import evaluate
 
 
+logger = evaluate.logging.get_logger(__name__)
+
 if PY_VERSION < version.parse("3.8"):
     import importlib_metadata
 else:
@@ -155,5 +157,6 @@ class CER(evaluate.Metric):
             )
             incorrect += measures["substitutions"] + measures["deletions"] + measures["insertions"]
             total += measures["substitutions"] + measures["deletions"] + measures["hits"]
-
-        return incorrect / total
+        ret = incorrect / total
+        logger.info(f"reference: {reference}, hypothesis: {prediction}, cer: {ret}")
+        return ret
